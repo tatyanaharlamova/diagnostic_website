@@ -1,0 +1,24 @@
+{% extends 'diagnostics/base.html'%}
+{% load my_tags %}
+{% block content %}
+{% for object in object_list %}
+<div class="col-md-4">
+    <div class="card mb-4 box-shadow">
+        <div style="width: 300px; height: 360px; overflow: hidden;">
+            <img src="{{ object.avatar | media_filter }} " alt="обрезанное изображение"
+                 style="object-fit: cover; width: 100%; height: 100%;">
+        </div>
+        <div class="card-body">
+            <p class="card-text">Врач: {{ object.name }}</p>
+            <p class="card-text">Специальность: {{ object.specialization }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
