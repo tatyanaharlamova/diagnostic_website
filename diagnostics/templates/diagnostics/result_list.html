@@ -1,0 +1,41 @@
+{% extends 'diagnostics/base.html'%}
+{% block content %}
+<div class="container">
+    <h1 class="jumbotron-heading">Результаты исследований</h1>
+</div>
+<div class="container">
+    <a class="btn btn-outline-primary mb-5" href="{% url 'diagnostics:result_create' %}">Добавить результат
+        исследования</a>
+</div>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Название исследования</th>
+        <th scope="col">Дата</th>
+        <th scope="col">Результат</th>
+        <th scope="col">Единицы измерения</th>
+        <th scope="col">Референсные значения</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+    <tr>
+        <td>{{ object.test }}</td>
+        <td>{{ object.date }}</td>
+        <td>{{ object.result }}</td>
+        <td>{{ object.units_of_measurement }}</td>
+        <td>{{ object.reference_values }}</td>
+        <td>
+            <div class="btn-group">
+                <a class="btn btn-primary" href="{% url 'diagnostics:result_edit' object.pk %}"
+                   role="button">Редактировать</a>
+                <a class="btn btn-primary" href="{% url 'diagnostics:result_delete' object.pk %}"
+                   role="button">Удалить</a>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

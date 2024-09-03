@@ -3,7 +3,8 @@
     <ul class="list-unstyled">
         <li><a href="{% url 'diagnostics:index' %}" class="text-white">Главная</a></li>
         <li><a href="{% url 'diagnostics:doctors_list' %}" class="text-white">Наши врачи</a></li>
-        <li><a href="#" class="text-white">Like on Facebook</a></li>
-        <li><a href="#" class="text-white">Email me</a></li>
+        <li><a href="{% url 'diagnostics:services_list' %}" class="text-white">Услуги</a></li>
+        <li><a href="{% url 'diagnostics:appointments_list' %}" class="text-white">Записи</a></li>
+        <li><a href="{% url 'diagnostics:results_list' %}" class="text-white">Результаты исследований</a></li>
     </ul>
 </div>
