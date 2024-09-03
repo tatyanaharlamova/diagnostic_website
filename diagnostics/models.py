@@ -16,10 +16,10 @@ class Doctor(models.Model):
     class Meta:
         verbose_name = 'Врач'
         verbose_name_plural = 'Врачи'
-        ordering = ['name', 'specialization']
+        ordering = ['name']
 
     def __str__(self):
-        return f'{self.name} {self.specialization}'
+        return f'{self.name}'
 
 
 class Service(models.Model):
@@ -37,7 +37,7 @@ class Service(models.Model):
 
 
 class Appointment(models.Model):
-    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата записи')
+    date = models.DateField(verbose_name='Дата записи')
     time = models.TimeField(verbose_name='Время записи')
     doctor = models.ForeignKey(Doctor, max_length=100, on_delete=models.CASCADE, verbose_name='Врач')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создана')
@@ -64,5 +64,5 @@ class Result(models.Model):
         ordering = ['-date']
 
     def __str__(self):
-        return (f'{self.user.name}, Тест: {self.test}, '
+        return (f'Тест: {self.test}, '
                 f'Результат: {self.result}, Единицы измерения: {self.units_of_measurement}')
