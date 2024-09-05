@@ -1,8 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from diagnostics.forms import DoctorForm, ServiceForm, AppointmentForm, ResultForm
-from diagnostics.models import Doctor, Service, Appointment, Result
+from diagnostics.forms import DoctorForm, ServiceForm, AppointmentForm, ResultForm, ContactForm
+from diagnostics.models import Doctor, Service, Appointment, Result, Contact
+from diagnostics.services import get_doctors_from_cache
 
 
 class HomeView(TemplateView):
@@ -11,12 +13,22 @@ class HomeView(TemplateView):
     """
     template_name = 'diagnostics/index.html'
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        services = Service.objects.all()
+        context_data['random_doctors'] = get_doctors_from_cache().order_by('?')[:3]
+        context_data['all_services'] = services.order_by('?')[:3]
+        return context_data
+
 
 class DoctorListView(ListView):
     """
     Контроллер отвечающий за отображение списка врачей
     """
     model = Doctor
+
+    def get_queryset(self):
+        return get_doctors_from_cache()
 
 
 class DoctorDetailView(DetailView):
@@ -26,7 +38,7 @@ class DoctorDetailView(DetailView):
     model = Doctor
 
 
-class DoctorCreateView(CreateView):
+class DoctorCreateView(CreateView, LoginRequiredMixin):
     """
     Контроллер, который отвечает за создание врача
     """
@@ -35,7 +47,7 @@ class DoctorCreateView(CreateView):
     success_url = reverse_lazy('diagnostics:doctors_list')
 
 
-class DoctorUpdateView(UpdateView):
+class DoctorUpdateView(UpdateView, LoginRequiredMixin):
     """
     Контроллер, который отвечает за редактирование врача
     """
@@ -46,7 +58,7 @@ class DoctorUpdateView(UpdateView):
         return reverse('diagnostics:doctor_detail', args=[self.kwargs.get('pk')])
 
 
-class DoctorDeleteView(DeleteView):
+class DoctorDeleteView(DeleteView, LoginRequiredMixin):
     """
     Контроллер, который отвечает за удаление врача
     """
@@ -68,7 +80,7 @@ class ServiceDetailView(DetailView):
     model = Service
 
 
-class ServiceCreateView(CreateView):
+class ServiceCreateView(CreateView, LoginRequiredMixin):
     """
     Контроллер, который отвечает за создание услуги
     """
@@ -77,7 +89,7 @@ class ServiceCreateView(CreateView):
     success_url = reverse_lazy('diagnostics:services_list')
 
 
-class ServiceUpdateView(UpdateView):
+class ServiceUpdateView(UpdateView, LoginRequiredMixin):
     """
     Контроллер, который отвечает за редактирование услуги
     """
@@ -88,7 +100,7 @@ class ServiceUpdateView(UpdateView):
         return reverse('diagnostics:service_detail', args=[self.kwargs.get('pk')])
 
 
-class ServiceDeleteView(DeleteView):
+class ServiceDeleteView(DeleteView, LoginRequiredMixin):
     """
     Контроллер, который отвечает за удаление услуги
     """
@@ -96,21 +108,28 @@ class ServiceDeleteView(DeleteView):
     success_url = reverse_lazy('diagnostics:services_list')
 
 
-class AppointmentListView(ListView):
+class AppointmentListView(ListView, LoginRequiredMixin):
     """
     Контроллер отвечающий за отображение списка записей
     """
     model = Appointment
 
+    def get_queryset(self, queryset=None):
+        queryset = super().get_queryset()
+        user = self.request.user
+        if not user.is_superuser and not user.groups.filter(name='moderator'):
+            queryset = queryset.filter(owner=self.request.user)
+        return queryset
 
-class AppointmentDetailView(DetailView):
+
+class AppointmentDetailView(DetailView, LoginRequiredMixin):
     """
     Контроллер, который отвечает за отображение информации о записи
     """
     model = Appointment
 
 
-class AppointmentCreateView(CreateView):
+class AppointmentCreateView(CreateView, LoginRequiredMixin):
     """
     Контроллер, который отвечает за создание записи
     """
@@ -118,8 +137,15 @@ class AppointmentCreateView(CreateView):
     form_class = AppointmentForm
     success_url = reverse_lazy('diagnostics:appointments_list')
 
+    def form_valid(self, form):
+        mailing = form.save()
+        user = self.request.user
+        mailing.owner = user
+        mailing.save()
+        return super().form_valid(form)
 
-class AppointmentUpdateView(UpdateView):
+
+class AppointmentUpdateView(UpdateView, LoginRequiredMixin):
     """
     Контроллер, который отвечает за редактирование записи
     """
@@ -130,7 +156,7 @@ class AppointmentUpdateView(UpdateView):
         return reverse('diagnostics:appointment_detail', args=[self.kwargs.get('pk')])
 
 
-class AppointmentDeleteView(DeleteView):
+class AppointmentDeleteView(DeleteView, LoginRequiredMixin):
     """
     Контроллер, который отвечает за удаление записи
     """
@@ -138,11 +164,18 @@ class AppointmentDeleteView(DeleteView):
     success_url = reverse_lazy('diagnostics:appointments_list')
 
 
-class ResultListView(ListView):
+class ResultListView(ListView, LoginRequiredMixin):
     """
     Контроллер отвечающий за отображение списка результатов
     """
     model = Result
+
+    def get_queryset(self, queryset=None):
+        queryset = super().get_queryset()
+        user = self.request.user
+        if not user.is_superuser and not user.groups.filter(name='moderator'):
+            queryset = queryset.filter(owner=self.request.user)
+        return queryset
 
 
 class ResultCreateView(CreateView):
@@ -169,3 +202,12 @@ class ResultDeleteView(DeleteView):
     """
     model = Result
     success_url = reverse_lazy('diagnostics:appointments_list')
+
+
+class ContactCreateView(CreateView):
+    """
+    Контроллер, который отвечает за создание сообщения
+    """
+    model = Contact
+    form_class = ContactForm
+    success_url = reverse_lazy("diagnostics:contacts")

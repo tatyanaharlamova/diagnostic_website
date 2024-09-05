@@ -1,8 +1,10 @@
 {% extends 'diagnostics/base.html'%}
 {% block content %}
+{% if user.is_authenticated %}
 <div class="container">
     <a class="btn btn-outline-primary mb-5" href="{% url 'diagnostics:appointment_create' %}">Записаться</a>
 </div>
+{% endif %}
 <table class="table table-striped">
     <thead>
     <tr>
@@ -22,12 +24,14 @@
         <td>{{ object.time }}</td>
         <td>
             <div class="btn-group">
+                {% if user == object.owner or user.is_staff %}
                 <a class="btn btn-primary" href="{% url 'diagnostics:appointment_detail' object.pk %}"
                        role="button">Просмотр</a>
                 <a class="btn btn-primary" href="{% url 'diagnostics:appointment_edit' object.pk %}"
                    role="button">Редактировать</a>
                 <a class="btn btn-primary" href="{% url 'diagnostics:appointment_delete' object.pk %}"
                    role="button">Отменить</a>
+                {% endif %}
             </div>
         </td>
     </tr>

@@ -3,10 +3,12 @@
 <div class="container">
     <h1 class="jumbotron-heading">Результаты исследований</h1>
 </div>
+{% if user.is_staff %}
 <div class="container">
     <a class="btn btn-outline-primary mb-5" href="{% url 'diagnostics:result_create' %}">Добавить результат
         исследования</a>
 </div>
+{% endif %}
 <table class="table table-striped">
     <thead>
     <tr>
@@ -15,6 +17,9 @@
         <th scope="col">Результат</th>
         <th scope="col">Единицы измерения</th>
         <th scope="col">Референсные значения</th>
+        {% if user.is_staff %}
+        <th scope="col">Пациент</th>
+        {% endif %}
         <th scope="col"></th>
     </tr>
     </thead>
@@ -26,13 +31,18 @@
         <td>{{ object.result }}</td>
         <td>{{ object.units_of_measurement }}</td>
         <td>{{ object.reference_values }}</td>
+        {% if user.is_staff %}
+        <td>{{ object.owner }}</td>
+        {% endif %}
         <td>
+            {% if user.is_staff %}
             <div class="btn-group">
                 <a class="btn btn-primary" href="{% url 'diagnostics:result_edit' object.pk %}"
                    role="button">Редактировать</a>
                 <a class="btn btn-primary" href="{% url 'diagnostics:result_delete' object.pk %}"
                    role="button">Удалить</a>
             </div>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}

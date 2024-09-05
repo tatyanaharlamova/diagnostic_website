@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CheckboxInput, forms
 from django.utils import timezone
 
-from diagnostics.models import Doctor, Appointment, Service, Result
+from diagnostics.models import Doctor, Appointment, Service, Result, Contact
 
 
 class StyleFormMixin:
@@ -28,7 +28,7 @@ class ServiceForm(StyleFormMixin, ModelForm):
 class AppointmentForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Appointment
-        fields = '__all__'
+        exclude = ('owner',)
 
     def clean_time(self):
         time = self.cleaned_data['time']
@@ -49,3 +49,10 @@ class ResultForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Result
         fields = '__all__'
+
+
+class ContactForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = Contact
+        fields = '__all__'
+

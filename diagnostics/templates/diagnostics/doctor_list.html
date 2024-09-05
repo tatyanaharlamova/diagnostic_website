@@ -1,9 +1,11 @@
 {% extends 'diagnostics/base.html'%}
 {% load my_tags %}
 {% block content %}
+{% if user.is_staff %}
 <div class="container">
     <a class="btn btn-outline-primary mb-5" href="{% url 'diagnostics:doctor_create' %}">Добавить врача</a>
 </div>
+{% endif %}
 {% for object in object_list %}
 <div class="col-md-4">
     <div class="card mb-4 box-shadow">
@@ -15,14 +17,16 @@
             <p class="card-text">Врач: {{ object.name }}</p>
             <p class="card-text">Специальность: {{ object.specialization }}</p>
             <div class="d-flex justify-content-between align-items-center">
+                {% if user.is_staff %}
                 <div class="btn-group">
                     <a class="btn btn-primary" href="{% url 'diagnostics:doctor_detail' object.pk %}"
                        role="button">Просмотр</a>
                     <a class="btn btn-primary" href="{% url 'diagnostics:doctor_edit' object.pk %}"
                        role="button">Редактировать</a>
-                     <a class="btn btn-primary" href="{% url 'diagnostics:doctor_delete' object.pk %}"
-                        role="button">Удалить</a>
+                    <a class="btn btn-primary" href="{% url 'diagnostics:doctor_delete' object.pk %}"
+                       role="button">Удалить</a>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
