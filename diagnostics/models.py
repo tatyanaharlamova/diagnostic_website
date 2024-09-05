@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import User
+
 NULLABLE = {'blank': True, 'null': True}
 
 
@@ -41,13 +43,14 @@ class Appointment(models.Model):
     time = models.TimeField(verbose_name='Время записи')
     doctor = models.ForeignKey(Doctor, max_length=100, on_delete=models.CASCADE, verbose_name='Врач')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создана')
+    owner = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.SET_NULL, **NULLABLE)
 
     class Meta:
         verbose_name = 'Запись'
         verbose_name_plural = 'Записи'
 
     def __str__(self):
-        return (f'{self.user}.  Вы записаны к '
+        return (f'{self.owner}, Вы записаны к '
                 f'{self.doctor.name} на {self.date} в {self.time}')
 
 
@@ -57,6 +60,7 @@ class Result(models.Model):
     result = models.CharField(max_length=150, verbose_name='Результат')
     units_of_measurement = models.CharField(max_length=100, verbose_name='Единицы измерения', **NULLABLE)
     reference_values = models.CharField(max_length=100, verbose_name='Референсные значения', **NULLABLE)
+    owner = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.SET_NULL, **NULLABLE)
 
     class Meta:
         verbose_name = 'Результат'
@@ -66,3 +70,28 @@ class Result(models.Model):
     def __str__(self):
         return (f'Тест: {self.test}, '
                 f'Результат: {self.result}, Единицы измерения: {self.units_of_measurement}')
+
+
+class Contact(models.Model):
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Имя",
+    )
+    phone = models.CharField(
+        max_length=50,
+        verbose_name="Телефон",
+        null=True,
+        blank=True,
+    )
+    message = models.TextField(
+        verbose_name="Сообщение",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Контакт"
+        verbose_name_plural = "Контакты"

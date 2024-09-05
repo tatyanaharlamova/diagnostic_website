@@ -19,7 +19,7 @@ class ServicesAdmin(admin.ModelAdmin):
 
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'date', 'time', 'doctor')
+    list_display = ('id', 'date', 'time', 'doctor', 'owner')
     list_filter = ('date',)
 
 

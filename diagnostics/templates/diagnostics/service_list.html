@@ -1,8 +1,10 @@
 {% extends 'diagnostics/base.html'%}
 {% block content %}
+{% if user == user.is_staff %}
 <div class="container">
     <a class="btn btn-outline-primary mb-5" href="{% url 'diagnostics:service_create' %}">Добавить услугу</a>
 </div>
+{% endif %}
 <table class="table table-striped">
     <thead>
     <tr>
@@ -19,6 +21,7 @@
         <td>{{ object.price }} руб.</td>
         <td>{{ object.description }}</td>
         <td>
+            {% if user.is_staff %}
             <div class="btn-group">
                     <a class="btn btn-primary" href="{% url 'diagnostics:service_detail' object.pk %}"
                        role="button">Просмотр</a>
@@ -27,6 +30,7 @@
                      <a class="btn btn-primary" href="{% url 'diagnostics:service_delete' object.pk %}"
                         role="button">Удалить</a>
                 </div>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}

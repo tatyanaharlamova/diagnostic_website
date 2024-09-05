@@ -1,6 +1,9 @@
-Django==5.1
+Django==4.2.2
 python-dotenv==1.0.1
 flake8==7.1.1
 psycopg2-binary==2.9.9
 black==24.8.0
 pillow==10.4.0
+redis==5.0.8
+django-stubs==5.0.4
+
