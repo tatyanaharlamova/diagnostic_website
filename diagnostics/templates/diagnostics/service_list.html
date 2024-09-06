@@ -1,7 +1,11 @@
 {% extends 'diagnostics/base.html'%}
 {% block content %}
-{% if user == user.is_staff %}
+
 <div class="container">
+    <h1 class="jumbotron-heading">Перечень услуг</h1>
+</div>
+{% if user.is_staff %}
+<div class="container  mt-5">
     <a class="btn btn-outline-primary mb-5" href="{% url 'diagnostics:service_create' %}">Добавить услугу</a>
 </div>
 {% endif %}

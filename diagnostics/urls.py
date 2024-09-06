@@ -5,19 +5,20 @@ from diagnostics.apps import DiagnosticsConfig
 from diagnostics.views import HomeView, DoctorListView, DoctorDetailView, DoctorCreateView, DoctorUpdateView, \
     DoctorDeleteView, ServiceListView, ServiceDetailView, ServiceCreateView, ServiceUpdateView, ServiceDeleteView, \
     AppointmentListView, AppointmentDetailView, AppointmentCreateView, AppointmentUpdateView, AppointmentDeleteView, \
-    ResultListView, ResultCreateView, ResultUpdateView, ResultDeleteView, ContactCreateView
+    ResultListView, ResultCreateView, ResultUpdateView, ResultDeleteView, ContactCreateView, CompanyView
 
 app_name = DiagnosticsConfig.name
 
 urlpatterns = [
     path('', HomeView.as_view(), name='index'),
+    path('company/', CompanyView.as_view(), name='company'),
     path('contacts/', ContactCreateView.as_view(), name='contacts'),
     path('doctors_list/', DoctorListView.as_view(), name='doctors_list'),
     path('doctor/<int:pk>/', cache_page(60)(DoctorDetailView.as_view()), name='doctor_detail'),
     path('doctor_create/', DoctorCreateView.as_view(), name='doctor_create'),
     path('doctor_edit/<int:pk>/', DoctorUpdateView.as_view(), name='doctor_edit'),
     path('doctor_delete/<int:pk>/', DoctorDeleteView.as_view(), name='doctor_delete'),
-    path('services_list/', cache_page(60)(ServiceListView.as_view()), name='services_list'),
+    path('services_list/', ServiceListView.as_view(), name='services_list'),
     path('service/<int:pk>/', cache_page(60)(ServiceDetailView.as_view()), name='service_detail'),
     path('service_create/', ServiceCreateView.as_view(), name='service_create'),
     path('service_edit/<int:pk>/', ServiceUpdateView.as_view(), name='service_edit'),

@@ -5,18 +5,20 @@
 <section class="jumbotron text-center">
     <div class="container">
         <h1 class="jumbotron-heading">Сайт компании медицинской диагностики</h1>
+        <h3 class="jumbotron-heading">О компании</h3>
         <p class="lead text-muted">В нашей клинике осуществляется качественная диагностика на экспертном
-            оборудовании, лабораторные тесты, проводятся приемы специалистов. Наша работа основана на принципах
+            оборудовании, лабораторные тесты, проводятся приемы специалистов.
+        </p>
+        <h3 class="jumbotron-heading">История компании</h3>
+        <p class="lead text-muted"> Клиника открыта в 2020 году.  В дальнейшем в рамках холдинга шло развитие новых
+            направлений, выделение востребованных медицинских услуг в специализированные центры и отделения,
+            расширялась география сети, увеличивалось количество многопрофильных медицинских центров.
+        </p>
+        <h3 class="jumbotron-heading">Миссия и ценности</h3>
+        <p class="lead text-muted"> Наша работа основана на принципах
             доказательной медицины. Наши пациенты получают высококачественную медицинскую помощь, соответствующую
             мировым стандартам, и безупречный уровень сервиса. Мы обеспечили удобный график работы клиники,
             отсутствие очередей и удобную форму записи и просмотр результатов исследований.
-        </p>
-        <p>
-            {% if user.is_authenticated %}
-            <a href="{% url 'diagnostics:appointment_create' %}" class="btn btn-primary my-2">Записаться</a>
-            {% else %}
-            <a href="{% url 'users:login' %}" class="btn btn-primary my-2">Войти</a>
-            {% endif %}
         </p>
     </div>
 
@@ -25,8 +27,9 @@
     <img src="media/pictures/00095909600540.jpg " alt="обрезанное изображение"
          style="object-fit: cover; width: 100%; height: 100%;">
 </div>
+
 <div class="container mt-5">
-    <h2 class="jumbotron-heading">Наши врачи</h2>
+    <h3 class="jumbotron-heading">Команда врачей</h3>
 </div>
 <div class="album py-5 bg-light">
     <div class="container">
@@ -40,7 +43,7 @@
                     </div>
                     <div class="card-body">
                         <p class="card-text">
-                        <h3>{{ object.name}}</h3>
+                        <h2>{{ object.name}}</h2>
                         <p class="card-text">Специализация: {{ object.specialization }}</p>
                         <p class="card-text"> Стаж: {{ object.experience }}</p>
                         <div class="d-flex justify-content-between align-items-center">
@@ -52,38 +55,4 @@
         </div>
     </div>
 </div>
-<div class="container mt-5">
-    <h3 class="jumbotron-heading">Услуги</h3>
-</div>
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th scope="col">Название услуги</th>
-        <th scope="col">Стоимость</th>
-        <th scope="col">Описание</th>
-        <th scope="col"></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for object in all_services %}
-    <tr>
-        <td>{{ object.service_name }}</td>
-        <td>{{ object.price }} руб.</td>
-        <td>{{ object.description }}</td>
-        <td>
-            {% if user.is_staff %}
-            <div class="btn-group">
-                <a class="btn btn-primary" href="{% url 'diagnostics:service_detail' object.pk %}"
-                   role="button">Просмотр</a>
-                <a class="btn btn-primary" href="{% url 'diagnostics:service_edit' object.pk %}"
-                   role="button">Редактировать</a>
-                <a class="btn btn-primary" href="{% url 'diagnostics:service_delete' object.pk %}"
-                   role="button">Удалить</a>
-            </div>
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
 {% endblock %}

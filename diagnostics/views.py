@@ -21,6 +21,20 @@ class HomeView(TemplateView):
         return context_data
 
 
+class CompanyView(TemplateView):
+    """
+    Контроллер страницы  "О компании"
+    """
+    template_name = 'diagnostics/company.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        services = Service.objects.all()
+        context_data['random_doctors'] = get_doctors_from_cache().order_by('?')[:3]
+        context_data['all_services'] = services.order_by('?')[:3]
+        return context_data
+
+
 class DoctorListView(ListView):
     """
     Контроллер отвечающий за отображение списка врачей

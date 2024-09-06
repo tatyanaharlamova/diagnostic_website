@@ -3,6 +3,9 @@
 {% block content %}
 {% if user.is_staff %}
 <div class="container">
+    <h1 class="jumbotron-heading">Наши врачи</h1>
+</div>
+<div class="container">
     <a class="btn btn-outline-primary mb-5" href="{% url 'diagnostics:doctor_create' %}">Добавить врача</a>
 </div>
 {% endif %}
