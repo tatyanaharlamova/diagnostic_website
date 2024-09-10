@@ -2,6 +2,9 @@
 {% block content %}
 {% if user.is_authenticated %}
 <div class="container">
+    <h1 class="jumbotron-heading">Записи</h1>
+</div>
+<div class="container">
     <a class="btn btn-outline-primary mb-5" href="{% url 'diagnostics:appointment_create' %}">Записаться</a>
 </div>
 {% endif %}

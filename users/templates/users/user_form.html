@@ -4,11 +4,11 @@
     <form class="row mt-5" method="post" enctype="multipart/form-data">
         <div class="col-6">
             <div class="card">
-                 <div class="card-header">
+                <div class="card-header">
                     {% if object %}
-                        <h5 class="card-title">Редактирование профиля</h5>
+                    <h5 class="card-title">Редактирование профиля</h5>
                     {% else %}
-                        <h5 class="card-title">Регистрация</h5>
+                    <h5 class="card-title">Регистрация</h5>
                     {% endif %}
                 </div>
                 <div class="card-body">
@@ -28,5 +28,15 @@
             </div>
         </div>
     </form>
+
+    <a class="btn btn-primary" href="{% url 'diagnostics:appointments_list' %}"
+       role="button">Мои записи</a>
+
+    <a class="btn btn-primary" href="{% url 'diagnostics:results_list' %}"
+       role="button">Посмотреть результаты исследований</a>
+
+    <a class="btn btn-primary" href="{% url 'diagnostics:appointment_create' %}"
+       role="button">Записаться</a>
+
 </div>
 {% endblock %}
