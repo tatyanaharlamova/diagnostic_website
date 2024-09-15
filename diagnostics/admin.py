@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from diagnostics.models import Doctor, Service, Appointment, Result
+from diagnostics.models import Doctor, Service, Appointment, Result, Static
 
 
 @admin.register(Doctor)
@@ -28,3 +28,9 @@ class ResultAdmin(admin.ModelAdmin):
     list_display = ('id', 'date', 'test', 'result', 'units_of_measurement', 'reference_values')
     list_filter = ('date',)
     search_fields = ('test',)
+
+
+@admin.register(Static)
+class StaticAdmin(admin.ModelAdmin):
+    list_display = ('id', 'created_at',)
+
