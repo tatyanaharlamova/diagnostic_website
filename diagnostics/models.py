@@ -95,3 +95,23 @@ class Contact(models.Model):
     class Meta:
         verbose_name = "Контакт"
         verbose_name_plural = "Контакты"
+
+
+class Static(models.Model):
+    company = models.TextField(verbose_name='О компании')
+    about = models.TextField(verbose_name='О нас', **NULLABLE)
+    history = models.TextField(verbose_name='История', **NULLABLE)
+    values = models.TextField(verbose_name='Ценности', **NULLABLE)
+    address = models.TextField(max_length=255, verbose_name='Адрес', **NULLABLE)
+    phone = models.CharField(max_length=255, verbose_name='Телефон', **NULLABLE)
+    email = models.EmailField(verbose_name='Электронная почта', **NULLABLE)
+    map = models.ImageField(upload_to='diagnostics/maps', **NULLABLE)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создана')
+
+    def __str__(self):
+        return self.company
+
+    class Meta:
+        verbose_name = "Статика"
+        verbose_name_plural = "Статика"
+

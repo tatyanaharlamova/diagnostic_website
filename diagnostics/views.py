@@ -3,7 +3,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from diagnostics.forms import DoctorForm, ServiceForm, AppointmentForm, ResultForm, ContactForm
-from diagnostics.models import Doctor, Service, Appointment, Result, Contact
+from diagnostics.models import Doctor, Service, Appointment, Result, Contact, Static
 from diagnostics.services import get_doctors_from_cache
 
 
@@ -16,8 +16,10 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         services = Service.objects.all()
+        companies = Static.objects.all()
         context_data['random_doctors'] = get_doctors_from_cache().order_by('?')[:3]
         context_data['all_services'] = services.order_by('?')[:3]
+        context_data['all_companies'] = companies.order_by()
         return context_data
 
 
@@ -30,8 +32,10 @@ class CompanyView(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         services = Service.objects.all()
+        companies = Static.objects.all()
         context_data['random_doctors'] = get_doctors_from_cache().order_by('?')[:3]
         context_data['all_services'] = services.order_by('?')[:3]
+        context_data['all_companies'] = companies.order_by()
         return context_data
 
 
@@ -225,3 +229,9 @@ class ContactCreateView(CreateView):
     model = Contact
     form_class = ContactForm
     success_url = reverse_lazy("diagnostics:contacts")
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        companies = Static.objects.all()
+        context_data['all_companies'] = companies.order_by()
+        return context_data
